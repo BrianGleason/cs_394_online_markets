@@ -17,21 +17,22 @@ def process_auction(auction, my_bidval):
             win_count += 1
             utility_sum += my_bidval.val - my_bidval.bid
     
-    win_probability = round(win_count / total_count * 100, 2)
+    win_probability = win_count / total_count
+    win_percentage = round(win_probability * 100, 2)
     utility_average = round(utility_sum / total_count, 2)
-    return win_probability, utility_average
+    expected_utility = round(win_probability * (my_bidval.val - my_bidval.bid), 2)
+    return win_percentage, expected_utility
 
 def process_utility(auction, my_bidval):
+    win_count = 0
     total_count = len(auction)
-    utility_sum = 0
     for bidval in auction:
         if my_bidval.bid > bidval.bid:
-            utility_sum += my_bidval.val - my_bidval.bid
-    
-    utility_average = round(utility_sum / total_count, 2)
-    utility_average = utility_sum / total_count
-    return utility_average
+            win_count += 1
+    win_probability = win_count / total_count
+    return round(win_probability * (my_bidval.val - my_bidval.bid), 2)
 
+# TODO: get utility average by val-bid*win probability
 def optimal_bid(auction, my_bidval):
     max_bidval = None
     max_utility_average = 0
@@ -48,14 +49,14 @@ def optimal_bid(auction, my_bidval):
     return max_bidval, max_utility_average
 
 
-def read_input(auction_a, auction_b, rows):
+def read_input(auction_a, auction_b, rows, netid):
     my_bidval_a = None
     my_bidval_b = None
     with open("bid_data.csv", 'r') as file:
         csvreader = csv.reader(file)
         header = next(csvreader)
         for row in csvreader:
-            if row[0] != '***5530': 
+            if row[0] != netid: 
                 rows.append(row)
                 auction_a.append(BidValue(float(row[1]), float(row[3])))
                 auction_b.append(BidValue(float(row[2]), float(row[4])))
@@ -65,12 +66,11 @@ def read_input(auction_a, auction_b, rows):
     
     return my_bidval_a, my_bidval_b
 
-
-def main():
+def analyze_netid(netid):
     rows = []
     auction_a = []
     auction_b = []
-    my_bidval_a, my_bidval_b = read_input(auction_a, auction_b, rows)
+    my_bidval_a, my_bidval_b = read_input(auction_a, auction_b, rows, netid)
     a_winchance, a_avg_util = process_auction(auction_a, my_bidval_a)
     b_winchance, b_avg_util = process_auction(auction_b, my_bidval_b)
 
@@ -92,10 +92,14 @@ def main():
     print(f'auction a maximized bid: {max_bidval_a.bid}, value: {max_bidval_a.val}, winchance: {max_a_winchance}%, avg_util: {max_util_avg_a}')
     print(f'auction b my bid: {my_bidval_b.bid}, value: {my_bidval_b.val}, winchance: {b_winchance}%, avg_util: {b_avg_util}')
     print(f'auction b maximized bid: {max_bidval_b.bid}, value: {max_bidval_b.val}, winchance: {max_b_winchance}%, avg_util: {max_util_avg_b}')
-    x = 0
-    for i in range(1000000000):
-        x += i
-    print(x)
+    pass
+
+
+def main():
+    analyze_netid('***5530')
+    print('\n')
+    analyze_netid('***5489')
+    
 
 main()
 
