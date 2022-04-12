@@ -11,15 +11,12 @@ def print_bv(bidval):
 def process_auction(auction, my_bidval):
     win_count = 0
     total_count = len(auction)
-    utility_sum = 0
     for bidval in auction:
         if my_bidval.bid > bidval.bid:
             win_count += 1
-            utility_sum += my_bidval.val - my_bidval.bid
     
     win_probability = win_count / total_count
     win_percentage = round(win_probability * 100, 2)
-    utility_average = round(utility_sum / total_count, 2)
     expected_utility = round(win_probability * (my_bidval.val - my_bidval.bid), 2)
     return win_percentage, expected_utility
 
