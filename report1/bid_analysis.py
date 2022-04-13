@@ -76,19 +76,21 @@ def preprocess_auction(auction):
 
     return auction_bid, auction_val
 
-def visualize(bids, values, text_pos_x, text_pos_y, title):
+def visualize(bids_1, values_1, bids_2, values_2):
 
     #find line of best fit
-    x = np.array(values)
-    y = np.array(bids)
+    x = np.array(values_1 + values_2)
+    y = np.array(bids_1 + bids_2)
     a, b = np.polyfit(x, y, 1)
 
-    plt.scatter(x,y, color = 'purple')
+    plt.scatter(values_1,bids_1, color = 'purple')
+    plt.scatter(values_2,bids_2, color = 'red')
     plt.plot(x, a*x+b, color='steelblue', linestyle='--', linewidth=2)
-    plt.text(text_pos_x, text_pos_y, 'bid = ' + '{:.2f}'.format(b) + ' + {:.2f}'.format(a) + 'val', size=14)
+    plt.text(1, 65, 'bid = ' + '{:.2f}'.format(b) + ' + {:.2f}'.format(a) + 'val', size=14)
     plt.xlabel("Bidder Value, v")
     plt.ylabel("Actual Bid, b")
-    plt.title(title)
+    plt.title("Bidder Value vs. Actual Bids (Auction A and Auction B)")
+    plt.legend(["Auction A" , "Auction B"])
     plt.show()
 
 
@@ -130,9 +132,8 @@ def analyze_netid(netid_1, netid_2):
     auction_bid_a, auction_val_a = preprocess_auction(auction_a)
     auction_bid_b, auction_val_b = preprocess_auction(auction_b)
 
-    visualize(auction_bid_a, auction_val_a, 1, 35, "Auction A")
-    visualize(auction_bid_b, auction_val_b, 55, 90, "Auction B")
-
+    visualize(auction_bid_a, auction_val_a, auction_bid_b, auction_val_b)
+  
 
 def main():
     analyze_netid('***5530', '***5489')
