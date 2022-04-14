@@ -177,12 +177,20 @@ def analyze_netid(netids):
     #Calculate what percent found the Bayes-Nash equilibrium and average percent of total value 
 
     equil_perc = perc_calc(total_bids, total_values)[0]
+    a_equil_perc = perc_calc(auction_bid_a, auction_val_a)[0]
+    b_equil_perc = perc_calc(auction_bid_b, auction_val_b)[0]
 
     avg_perc = perc_calc(total_bids, total_values)[1]
+    a_avg_perc = perc_calc(auction_bid_a, auction_val_a)[1]
+    b_avg_perc = perc_calc(auction_bid_b, auction_val_b)[1]
 
     print(f'Percent of bids that are Bayes-Nash Equilibrium: {equil_perc}%')
-
+    print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction A: {a_equil_perc}%')
+    print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction B: {b_equil_perc}%')
     print(f'Average percent of total value: {avg_perc}%')
+    print(f'Average percent of total value from Auction A: {a_avg_perc}%')
+    print(f'Average percent of total value from Auction B: {b_avg_perc}%')
+
 
     #visualize scatterplot
 
