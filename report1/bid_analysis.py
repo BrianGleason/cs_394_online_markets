@@ -66,6 +66,16 @@ def read_input(auction_a, auction_b, rows, netid):
     return my_bidval_a, my_bidval_b
 
 
+def read_netids():
+    with open("bid_data.csv", 'r') as file:
+        netids=[]
+        csvreader = csv.reader(file)
+        header = next(csvreader)
+        for row in csvreader:
+            netids.append(row[0])
+    
+    return netids
+
 def preprocess_auction(auction):
     #convert auctions to bid and value lists for visualizations
     auction_bid = []
@@ -94,9 +104,11 @@ def visualize(bids_1, values_1, bids_2, values_2):
     plt.show()
 
 
-def analyze_netid(netid_1, netid_2):
-    both_ids = [netid_1, netid_2]
-    for netid in both_ids:
+def analyze_netid(netids):
+    sum_optimal_bid_percentages_a = 0
+    sum_optimal_bid_percentages_b = 0
+
+    for netid in netids:
         rows = []
         auction_a = []
         auction_b = []
@@ -123,6 +135,12 @@ def analyze_netid(netid_1, netid_2):
         print(f'auction b my bid: {my_bidval_b.bid}, value: {my_bidval_b.val}, winchance: {b_winchance}%, avg_util: {b_avg_util}')
         print(f'auction b maximized bid: {max_bidval_b.bid}, value: {max_bidval_b.val}, winchance: {max_b_winchance}%, avg_util: {max_util_avg_b}')
         print('\n')
+
+        #find optimal bids
+        current_auction_a_opt_bid = max_bidval_a.bid / max_bidval_a.val * 100
+        current_auction_b_opt_bid = max_bidval_b.bid / max_bidval_b.val * 100
+        sum_optimal_bid_percentages_a += current_auction_a_opt_bid
+        sum_optimal_bid_percentages_b += current_auction_b_opt_bid
     
     #re-append my own bid and value to auctions list
     auction_a.append(my_bidval_a)
@@ -133,10 +151,20 @@ def analyze_netid(netid_1, netid_2):
     auction_bid_b, auction_val_b = preprocess_auction(auction_b)
 
     visualize(auction_bid_a, auction_val_a, auction_bid_b, auction_val_b)
+
+    total_bids = len(netids)
+    print("Average optimal bid percentage auction A", sum_optimal_bid_percentages_a / total_bids)
+    print("Average optimal bid percentage auction B", sum_optimal_bid_percentages_b / total_bids)
+
+    #return average optimal bid percentage
+    return
   
 
 def main():
-    analyze_netid('***5530', '***5489')
+    our_netids = ['***5530', '***5489']
+    analyze_netid(our_netids)
+    all_netids = read_netids()
+    analyze_netid(all_netids)
 
     
 
