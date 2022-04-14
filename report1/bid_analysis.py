@@ -140,19 +140,20 @@ def analyze_netid(netids):
         max_a_winchance, max_util_avg_a = process_auction(auction_a, max_bidval_a)
         max_b_winchance, max_util_avg_b = process_auction(auction_b, max_bidval_b)
 
-        print('auction a my bidval')
-        print_bv(my_bidval_a)
-        print('auction a maximized bidval')
-        print_bv(max_bidval_a)
-        print('auction b my bidval')
-        print_bv(my_bidval_b)
-        print('auction b maximized bidval')
-        print_bv(max_bidval_b)
-        print(f'auction a my bid: {my_bidval_a.bid}, value: {my_bidval_a.val}, winchance: {a_winchance}%, avg_util: {a_avg_util}')
-        print(f'auction a maximized bid: {max_bidval_a.bid}, value: {max_bidval_a.val}, winchance: {max_a_winchance}%, avg_util: {max_util_avg_a}')
-        print(f'auction b my bid: {my_bidval_b.bid}, value: {my_bidval_b.val}, winchance: {b_winchance}%, avg_util: {b_avg_util}')
-        print(f'auction b maximized bid: {max_bidval_b.bid}, value: {max_bidval_b.val}, winchance: {max_b_winchance}%, avg_util: {max_util_avg_b}')
-        print('\n')
+        if len(netids) < 5:
+            print('auction a my bidval')
+            print_bv(my_bidval_a)
+            print('auction a maximized bidval')
+            print_bv(max_bidval_a)
+            print('auction b my bidval')
+            print_bv(my_bidval_b)
+            print('auction b maximized bidval')
+            print_bv(max_bidval_b)
+            print(f'auction a my bid: {my_bidval_a.bid}, value: {my_bidval_a.val}, winchance: {a_winchance}%, avg_util: {a_avg_util}')
+            print(f'auction a maximized bid: {max_bidval_a.bid}, value: {max_bidval_a.val}, winchance: {max_a_winchance}%, avg_util: {max_util_avg_a}')
+            print(f'auction b my bid: {my_bidval_b.bid}, value: {my_bidval_b.val}, winchance: {b_winchance}%, avg_util: {b_avg_util}')
+            print(f'auction b maximized bid: {max_bidval_b.bid}, value: {max_bidval_b.val}, winchance: {max_b_winchance}%, avg_util: {max_util_avg_b}')
+            print('\n')
 
         #find optimal bids
         current_auction_a_opt_bid = max_bidval_a.bid / max_bidval_a.val * 100
@@ -183,22 +184,22 @@ def analyze_netid(netids):
     avg_perc = perc_calc(total_bids, total_values)[1]
     a_avg_perc = perc_calc(auction_bid_a, auction_val_a)[1]
     b_avg_perc = perc_calc(auction_bid_b, auction_val_b)[1]
-
-    print(f'Percent of bids that are Bayes-Nash Equilibrium: {equil_perc}%')
-    print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction A: {a_equil_perc}%')
-    print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction B: {b_equil_perc}%')
-    print(f'Average percent of total value: {avg_perc}%')
-    print(f'Average percent of total value from Auction A: {a_avg_perc}%')
-    print(f'Average percent of total value from Auction B: {b_avg_perc}%')
+    if len(netids) < 5:
+        print(f'Percent of bids that are Bayes-Nash Equilibrium: {equil_perc}%')
+        print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction A: {a_equil_perc}%')
+        print(f'Percent of bids that are Bayes-Nash Equilibrium from Auction B: {b_equil_perc}%')
+        print(f'Average percent of total value: {avg_perc}%')
+        print(f'Average percent of total value from Auction A: {a_avg_perc}%')
+        print(f'Average percent of total value from Auction B: {b_avg_perc}%')
 
 
     #visualize scatterplot
+    if len(netids) < 5:
+        visualize(auction_bid_a, auction_val_a, auction_bid_b, auction_val_b)
 
-    visualize(auction_bid_a, auction_val_a, auction_bid_b, auction_val_b)
-
-    total_bids = len(netids)
-    print("Average optimal bid percentage auction A", sum_optimal_bid_percentages_a / total_bids)
-    print("Average optimal bid percentage auction B", sum_optimal_bid_percentages_b / total_bids)
+        total_bids = len(netids)
+        print("Average optimal bid percentage auction A", sum_optimal_bid_percentages_a / total_bids)
+        print("Average optimal bid percentage auction B", sum_optimal_bid_percentages_b / total_bids)
 
     #return average optimal bid percentage
     return
